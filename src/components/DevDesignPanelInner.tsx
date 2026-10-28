@@ -1,10 +1,89 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useControls, Leva } from "leva";
+import { useEffect, useState, useCallback } from "react";
+import { useControls, button, Leva } from "leva";
 
 export default function DevDesignPanelInner() {
   const [minimized, setMinimized] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const fallbackCopyText = useCallback((text: string) => {
+    try {
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      textArea.style.position = "fixed";
+      textArea.style.top = "-9999px";
+      textArea.style.opacity = "0";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textArea);
+      return true;
+    } catch (err) {
+      console.error("Fallback copy failed:", err);
+      return false;
+    }
+  }, []);
+
+  const copyValuesToClipboard = useCallback(
+    async (valuesOverride?: {
+      cardRadius?: number;
+      cardPadding?: number;
+      cardGap?: number;
+      headingSize?: number;
+      accentColor?: string;
+    }) => {
+      const root = typeof document !== "undefined" ? document.documentElement : null;
+      const radius =
+        valuesOverride?.cardRadius !== undefined
+          ? `${valuesOverride.cardRadius}px`
+          : root?.style.getPropertyValue("--card-radius") || "12px";
+      const padding =
+        valuesOverride?.cardPadding !== undefined
+          ? `${valuesOverride.cardPadding}px`
+          : root?.style.getPropertyValue("--card-padding") || "18px";
+      const gap =
+        valuesOverride?.cardGap !== undefined
+          ? `${valuesOverride.cardGap}px`
+          : root?.style.getPropertyValue("--cards-gap") || "16px";
+      const heading =
+        valuesOverride?.headingSize !== undefined
+          ? `${valuesOverride.headingSize}px`
+          : root?.style.getPropertyValue("--heading-size") || "22px";
+      const accent =
+        valuesOverride?.accentColor !== undefined
+          ? valuesOverride.accentColor
+          : root?.style.getPropertyValue("--accent-color") || "#171717";
+
+      const text = [
+        `--card-radius: ${radius};`,
+        `--card-padding: ${padding};`,
+        `--cards-gap: ${gap};`,
+        `--heading-size: ${heading};`,
+        `--accent-color: ${accent};`,
+      ].join("\n");
+
+      let success = false;
+      if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
+        try {
+          await navigator.clipboard.writeText(text);
+          success = true;
+        } catch {
+          success = fallbackCopyText(text);
+        }
+      } else {
+        success = fallbackCopyText(text);
+      }
+
+      if (success) {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      }
+      return text;
+    },
+    [fallbackCopyText]
+  );
 
   const { cardRadius, cardPadding, cardGap, headingSize, accentColor } = useControls({
     cardRadius: {
@@ -39,6 +118,15 @@ export default function DevDesignPanelInner() {
       value: "#171717",
       label: "Accent Color",
     },
+    "Copy values": button((get) => {
+      copyValuesToClipboard({
+        cardRadius: get("cardRadius"),
+        cardPadding: get("cardPadding"),
+        cardGap: get("cardGap"),
+        headingSize: get("headingSize"),
+        accentColor: get("accentColor"),
+      });
+    }),
   });
 
   useEffect(() => {
@@ -75,6 +163,7 @@ export default function DevDesignPanelInner() {
         }
       `}</style>
 
+      {/* Header bar */}
       <div
         style={{
           display: "flex",
@@ -133,22 +222,83 @@ export default function DevDesignPanelInner() {
       </div>
 
       {!minimized && (
-        <div style={{ padding: "6px" }}>
-          <Leva
-            fill
-            titleBar={false}
-            neverHide={true}
-            hideCopyButton={true}
-            collapsed={{ collapsed: false, onChange: () => {} }}
-            theme={{
-              colors: {
-                accent1: accentColor,
-                accent2: accentColor,
-                accent3: accentColor,
-              },
-            }}
-          />
-        </div>
+        <>
+          <div style={{ padding: "6px" }}>
+            <Leva
+              fill
+              titleBar={false}
+              neverHide={true}
+              hideCopyButton={true}
+              collapsed={{ collapsed: false, onChange: () => {} }}
+              theme={{
+                colors: {
+                  accent1: accentColor,
+                  accent2: accentColor,
+                  accent3: accentColor,
+                },
+              }}
+            />
+          </div>
+
+          {/* Prominent Copy values button at panel bottom */}
+          <div style={{ padding: "0 10px 10px 10px" }}>
+            <button
+              type="button"
+              id="copy-values-btn"
+              onClick={() =>
+                copyValuesToClipboard({
+                  cardRadius,
+                  cardPadding,
+                  cardGap,
+                  headingSize,
+                  accentColor,
+                })
+              }
+              style={{
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "6px",
+                padding: "7px 12px",
+                backgroundColor: copied ? "#15803d" : "rgba(255, 255, 255, 0.08)",
+                color: "#ffffff",
+                border: "1px solid rgba(255, 255, 255, 0.12)",
+                borderRadius: "6px",
+                fontSize: "11px",
+                fontWeight: 500,
+                cursor: "pointer",
+                transition: "all 0.15s ease",
+              }}
+              title="Copy current design variables to clipboard"
+            >
+              {copied ? (
+                <>
+                  <span style={{ fontSize: "12px" }}>✓</span>
+                  <span>Copied to clipboard!</span>
+                </>
+              ) : (
+                <>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+                  </svg>
+                  <span>Copy values</span>
+                </>
+              )}
+            </button>
+          </div>
+        </>
       )}
     </aside>
   );
