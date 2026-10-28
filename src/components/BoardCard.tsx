@@ -6,7 +6,11 @@ export function BoardCard({ board }: { board: Board }) {
   return (
     <Link
       href={`/boards/${board.id}`}
-      className="group block p-5 bg-white rounded-xl border border-neutral-200/80 hover:border-neutral-400 hover:shadow-md transition-all duration-150 relative overflow-hidden"
+      style={{
+        borderRadius: "var(--card-radius)",
+        padding: "var(--card-padding)",
+      }}
+      className="group block bg-white border border-neutral-200/80 hover:border-neutral-400 hover:shadow-md transition-all duration-150 relative overflow-hidden"
     >
       <div className="flex items-start justify-between gap-3 mb-2">
         <h3 className="font-semibold text-sm text-neutral-900 group-hover:text-neutral-700 transition-colors line-clamp-1">

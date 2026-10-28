@@ -100,7 +100,10 @@ export default async function BoardPage({ params }: BoardPageProps) {
       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 pb-6 mb-8 border-b border-neutral-200/80">
         <div>
           <div className="flex items-center gap-2 mb-1.5">
-            <h1 className="text-xl font-bold tracking-tight text-neutral-900">
+            <h1
+              style={{ fontSize: "var(--heading-size)" }}
+              className="font-bold tracking-tight text-neutral-900"
+            >
               {board.title}
             </h1>
             {board.is_public ? (

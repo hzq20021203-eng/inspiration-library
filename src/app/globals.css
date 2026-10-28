@@ -5,6 +5,13 @@
 :root {
   --background: #fbfbfb;
   --foreground: #111111;
+
+  /* Live adjustable design properties */
+  --card-radius: 12px;
+  --card-padding: 18px;
+  --cards-gap: 16px;
+  --heading-size: 22px;
+  --accent-color: #171717;
 }
 
 body {

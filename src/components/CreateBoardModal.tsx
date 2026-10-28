@@ -29,7 +29,8 @@ export function CreateBoardModal() {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium text-white bg-neutral-900 hover:bg-neutral-800 rounded-lg shadow-sm transition-colors"
+        style={{ backgroundColor: "var(--accent-color)" }}
+        className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium text-white rounded-lg shadow-sm transition-opacity hover:opacity-90"
       >
         <Plus className="w-3.5 h-3.5" />
         <span>New board</span>
@@ -138,7 +139,8 @@ export function CreateBoardModal() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-medium text-white bg-neutral-900 hover:bg-neutral-800 rounded-lg transition-colors disabled:opacity-50"
+                  style={{ backgroundColor: "var(--accent-color)" }}
+                  className="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-medium text-white rounded-lg transition-opacity hover:opacity-90 disabled:opacity-50"
                 >
                   {loading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   <span>Create Board</span>

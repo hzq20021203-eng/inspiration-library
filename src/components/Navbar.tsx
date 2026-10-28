@@ -10,7 +10,10 @@ export async function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center gap-2 group">
-            <span className="w-5 h-5 rounded bg-neutral-900 text-white flex items-center justify-center text-xs font-mono group-hover:bg-neutral-700 transition-colors">
+            <span
+              style={{ backgroundColor: "var(--accent-color)" }}
+              className="w-5 h-5 rounded text-white flex items-center justify-center text-xs font-mono transition-colors"
+            >
               ✦
             </span>
             <span className="font-semibold text-sm tracking-tight text-neutral-900">
@@ -40,7 +43,8 @@ export async function Navbar() {
               </Link>
               <Link
                 href="/sign-up"
-                className="px-3 py-1.5 text-xs font-medium text-white bg-neutral-900 hover:bg-neutral-800 rounded-md transition-colors shadow-sm"
+                style={{ backgroundColor: "var(--accent-color)" }}
+                className="px-3 py-1.5 text-xs font-medium text-white rounded-md transition-opacity hover:opacity-90 shadow-sm"
               >
                 Get Started
               </Link>

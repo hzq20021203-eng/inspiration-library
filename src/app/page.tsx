@@ -38,7 +38,10 @@ export default async function HomePage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 mb-8 border-b border-neutral-200/80">
           <div>
-            <h1 className="text-xl font-bold tracking-tight text-neutral-900">
+            <h1
+              style={{ fontSize: "var(--heading-size)" }}
+              className="font-bold tracking-tight text-neutral-900"
+            >
               My Boards
             </h1>
             <p className="text-xs text-neutral-500 mt-1">
@@ -66,7 +69,10 @@ export default async function HomePage() {
             <CreateBoardModal />
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div
+            style={{ gap: "var(--cards-gap)" }}
+            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+          >
             {boards.map((board) => (
               <BoardCard key={board.id} board={board} />
             ))}

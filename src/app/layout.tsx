@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { DatabaseNotice } from "@/components/DatabaseNotice";
+import { DevDesignControls } from "@/components/DevDesignControls";
+import { Agentation } from "agentation";
 
 export const metadata: Metadata = {
   title: "Inspiration Library",
@@ -19,6 +21,8 @@ export default function RootLayout({
         <DatabaseNotice />
         <Navbar />
         <main className="flex-1">{children}</main>
+        {process.env.NODE_ENV === "development" && <Agentation />}
+        <DevDesignControls />
       </body>
     </html>
   );

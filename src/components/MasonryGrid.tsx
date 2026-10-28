@@ -48,11 +48,18 @@ export function MasonryGrid({
   }
 
   return (
-    <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
+    <div
+      style={{ columnGap: "var(--cards-gap)" }}
+      className="columns-1 sm:columns-2 md:columns-3 lg:columns-4"
+    >
       {items.map((item) => (
         <div
           key={item.id}
-          className="break-inside-avoid group bg-white border border-neutral-200/80 rounded-xl overflow-hidden hover:shadow-md hover:border-neutral-300 transition-all duration-200 flex flex-col"
+          style={{
+            borderRadius: "var(--card-radius)",
+            marginBottom: "var(--cards-gap)",
+          }}
+          className="break-inside-avoid group bg-white border border-neutral-200/80 overflow-hidden hover:shadow-md hover:border-neutral-300 transition-all duration-200 flex flex-col"
         >
           {/* Image */}
           <div className="relative overflow-hidden bg-neutral-100">
@@ -89,7 +96,7 @@ export function MasonryGrid({
           </div>
 
           {/* Details */}
-          <div className="p-3.5">
+          <div style={{ padding: "var(--card-padding)" }}>
             <h4 className="font-medium text-xs text-neutral-900 leading-snug mb-1">
               {item.title}
             </h4>
